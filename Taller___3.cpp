@@ -14,13 +14,13 @@ void imprimirDirecciones(int arreglo[], int size); //Opcion 3 -> Imprimir las di
 
 void crearVectorDirecciones (int arreglo[], int size, int *ubicacion[]); //Opcion 4 -> Crear un vector direcciones
 
-void imprimirVectorDirecciones (int arreglo[], int size, int *ubicacion[]); //Opcion 5 -> Imprimir el vector de las direcciones
+void imprimirVectorDirecciones (int size, int *ubicacion[]); //Opcion 5 -> Imprimir el vector de las direcciones. **no es necesario arreglo[]
 
-void imprimirVectorNumeros(int arreglo[], int size, int *ubicacion[]); //Opcion 6-> Imprimir el vector de numeros desde el vector de direcciones
+void imprimirVectorNumeros(int size, int *ubicacion[]); //Opcion 6-> Imprimir el vector de numeros desde el vector de direcciones
 
 void ordenarVector(int arreglo[], int size, int *ubicacion[]); //Opcion 7 -> Ordenar el vector de apuntadores teniendo como criterio el vector de numeros
 
-void imprimirVectorOrdenado (int arreglo[], int size, int *ubicacion[]); //Opcion 8 -> Imprimir el vector numeros a partir del vector de apuntadores
+void imprimirVectorOrdenado (int size, int *ubicacion[]); //Opcion 8 -> Imprimir el vector numeros a partir del vector de apuntadores
 
 
 int main(){
@@ -44,16 +44,16 @@ int main(){
 			    crearVectorDirecciones(vector,max,direcciones);	    	
 	    		break;
 	    	case 5:
-	    		imprimirVectorDirecciones (vector,max,direcciones);
+	    		imprimirVectorDirecciones (max,direcciones);
 	    		break;
 	    	case 6:
-	    		imprimirVectorNumeros(vector,max,direcciones);
+	    		imprimirVectorNumeros(max,direcciones);
 	    		break;
 	    	case 7:
 	    		ordenarVector (vector,max,direcciones);
 	    		break;
 	    	case 8:
-	    		imprimirVectorOrdenado (vector,max,direcciones);
+	    		imprimirVectorOrdenado (max,direcciones);
 	    		break;
 	    }
    }while(op!=9);
@@ -65,6 +65,7 @@ int menu(){
 	
 	int x;
 	
+	cout<<endl<<"************************************************************************************************************************";
 	cout<<endl<<"Bienvenido al menu"<<endl<<endl;
 	cout<<"Ingrese 1 para crear el vector de numeros enteros de 10 elementos aleatoriamente."<<endl<<endl;
 	cout<<"Ingrese 2 para imprimir el contenido del vector de numeros creado anteriormente."<<endl<<endl;
@@ -75,6 +76,7 @@ int menu(){
 	cout<<"Ingrese 7 para ordenar el vector de apuntadores teniendo como criterio de ordenacion el vector numeros"<<endl<<endl;
 	cout<<"Ingrese 8 para imprimir el vector numeros a partir del vector de direcciones ordenado"<<endl<<endl;
 	cout<<"Ingrese 9 para salir del programa"<<endl<<endl;
+	cout<<"Opcion: ";
 	cin>>x;
 	
 	return x;
@@ -102,11 +104,9 @@ void imprimirVector(int arreglo[], int size){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void imprimirDirecciones(int arreglo[], int size){
-	int *p;
 	
 	for(int i=0; i<size;i++){
-		p=&*(arreglo + i);
-		cout<<"El numero "<<*(arreglo + i)<<" tiene la direccion "<<p<<endl;
+		cout<<"El numero "<<*(arreglo + i)<<" tiene la direccion "<<&*(arreglo + i)<<endl;
 	}	
 }
 
@@ -115,70 +115,67 @@ void imprimirDirecciones(int arreglo[], int size){
 void crearVectorDirecciones (int arreglo[], int size, int *ubicacion[]){
 	
 	for(int i=0; i<size; i++){
-	*(ubicacion + i)= (arreglo + i);
+		*(ubicacion + i)= (arreglo + i);
 	}
-	
-	
 
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void imprimirVectorDirecciones (int arreglo[], int size, int *ubicacion[]){
-	
-	for(int i=0; i<size; i++){
-		cout<<" ["<<*(arreglo + i)<<"] ";
-	}
-	
-	cout<<endl;
+void imprimirVectorDirecciones (int size, int *ubicacion[]){
 	
 	for(int i=0; i<size; i++){
 		cout<<" ["<<*(ubicacion + i)<<"] ";	
 	}
-	
-	
 		
 }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Aqui debo usar doble apuntador -> Apuntador apuntando a otro 
-void imprimirVectorNumeros(int arreglo[], int size, int *ubicacion[]){
-	int **p;
+void imprimirVectorNumeros(int size, int *ubicacion[]){
 
+	int *x;
     for(int i=0; i<size;i++){
-    	**p=**(ubicacion+i);
-		cout<<p;
+    		x= *(ubicacion + i);
+			cout<<" ["<<*x<<"] ";
 	}
 }
 
+void swap(int *xp, int *yp) 
+{ 
+    int temp = *xp; 
+    *xp = *yp; 
+    *yp = temp; 
+} 
+  
+// A function to implement bubble sort 
+void bubbleSort(int arr[], int* arr2[], int n) 
+{
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void ordenarVector(int arreglo[], int size, int *ubicacion[]){ //Usar el método burbuja en vez de este -> Los numeros se pueden repetir
-	int *aux;
-	
-	for(int i=0; i<size;i++){
-		
-		for(int j=0;j<size;j++){
-			
-			if((arreglo+j)>(arreglo+(j+1))){
-				aux=*(ubicacion+j);
-				*(ubicacion+j)=*(ubicacion+j+1);
-				*(ubicacion+j+1)=aux;
-			}
+    int i, j; 
+    for (i = 0; i < n-1; i++)     
+    // Last i elements are already in place 
+    for (j = 0; j < n-i-1; j++){
+
+    	if (arr[j] > arr[j+1]) 
+            swap(&arr[j], &arr[j+1]); 
 		}
-	}
+	} 
+        
 	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ordenarVector(int arreglo[], int size, int *ubicacion[]){
 
+	bubbleSort(arreglo, ubicacion, size );
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void imprimirVectorOrdenado (int arreglo[], int size, int *ubicacion[]){
+void imprimirVectorOrdenado (int size, int *ubicacion[]){
 	
-	for(int i=0; i<size;i++){
-		cout<<" ["<<*(ubicacion+i)<<"] ";
+	int *x;
+    for(int i=0; i<size;i++){
+    		x= *(ubicacion + i);
+			cout<<" ["<<*x<<"] ";
 	}
 }
-
-
